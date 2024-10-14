@@ -15,17 +15,17 @@ navLinks.forEach((navLink) => {
 });
 btn.addEventListener('click', () => {
     navLink_Text = input.value;
-    console.log(input.value);
-    console.log(navLink_Text);
     apiData();
 });
 let remove = [];
+let removeImage = [];
 const apiData = async () => {
     const URL = `https://newsapi.org/v2/everything?q=${navLink_Text}&apiKey=31c224d1efdc4c79bb18b9328a31302a`;
     let data = await fetch(URL);
     let response = await data.json();
+    console.log(response);
     container.innerHTML = '';
-    for(let article of response.articles) {
+    for(let news of response.articles) {
         let section = document.createElement('section');
         section.innerHTML = `<a href="#" class="main-src" target="_blank">
                                 <div class="card">
@@ -75,6 +75,7 @@ const apiData = async () => {
     let sections = document.querySelectorAll('section');
     if(sections.length == response.articles.length) {
         _remove();
+        _removeImg();
     }
 }
     
@@ -89,7 +90,19 @@ const _remove = () => {
             parent4.remove();
         }
     });
-} 
+}
+
+const _removeImg = () => {
+    let images = document.querySelectorAll('.card-img-top');
+    images.forEach((img) => {
+        if(img.getAttribute('src') == 'null') {
+            removeImage.push(img);
+        }
+    });
+    for(let val of removeImage) {
+        val.setAttribute('src', 'default_img.avif');
+    }
+}
 if(navLink_Text == 'everything') {
     apiData();
 }
